@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Me {
+  id          String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name        String
+  lastname    String
+  phone       String
+  description String
+}
+
+enum KnowledgeCategory {
+  TECH
+  OTHER
+}
+
+model Knowledge {
+  id             String            @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name           String
+  description    String
+  category       KnowledgeCategory
+  icon           String?
+  level          Int
+  place          String?
+  certificateURL String?
+  state          Boolean           @default(true)
+}
+
+model ProjectTag {
+  id       String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name     String
+  color    String
+  projects Project[]
+}
+
+model Project {
+  id            String       @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name          String
+  imageURLs     String[]
+  tags          ProjectTag[]
+  description   String
+  repositoryURL String?
+  state         Boolean
+}
