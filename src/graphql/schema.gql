@@ -3,6 +3,17 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input CreateKnowledgeInput {
+  category: KnowledgeCategory!
+  certificateURL: String
+  description: String!
+  icon: String
+  level: Int!
+  name: String!
+  place: String
+  state: Boolean!
+}
+
 type Knowledge {
   category: KnowledgeCategory!
   certificateURL: String
@@ -28,6 +39,10 @@ type Me {
   name: String!
   phone: String!
   projects: [Project!]!
+}
+
+type Mutation {
+  addKnowledge(data: CreateKnowledgeInput!): Knowledge!
 }
 
 type Project {

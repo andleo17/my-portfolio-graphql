@@ -8,7 +8,10 @@ import { APIContext } from '../../utils/createContext';
 export default class MeResolver {
 	@FieldResolver(() => [Knowledge])
 	async knowledges(@Ctx() { prisma }: APIContext): Promise<Knowledge[]> {
-		return prisma.knowledge.findMany({ where: { state: true } });
+		return prisma.knowledge.findMany({
+			where: { state: true },
+			orderBy: { level: 'desc' },
+		});
 	}
 
 	@FieldResolver(() => [Project])
