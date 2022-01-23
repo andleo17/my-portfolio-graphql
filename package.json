@@ -40,5 +40,9 @@
 		"nodemailer": "^6.7.2",
 		"reflect-metadata": "^0.1.13",
 		"type-graphql": "^1.1.1"
+	},
+	"engines": {
+		"npm": "8.x",
+		"node": "17.x"
 	}
 }
