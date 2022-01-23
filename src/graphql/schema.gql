@@ -43,6 +43,7 @@ type Me {
 
 type Mutation {
   addKnowledge(data: CreateKnowledgeInput!): Knowledge!
+  sendMail(data: SendMailInput!): Boolean!
 }
 
 type Project {
@@ -64,4 +65,11 @@ type ProjectTag {
 
 type Query {
   personalData: Me!
+}
+
+input SendMailInput {
+  content: String!
+  email: String!
+  name: String!
+  subject: String!
 }
