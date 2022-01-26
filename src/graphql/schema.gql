@@ -14,6 +14,26 @@ input CreateKnowledgeInput {
   state: Boolean!
 }
 
+input CreateProjectInput {
+  description: String!
+  imageURLs: [String!]
+  name: String!
+  repositoryURL: String
+  slug: String!
+  state: Boolean = true
+  tagIDs: [String!]!
+}
+
+input CreateProjectTagInput {
+  color: String!
+  name: String!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 type Knowledge {
   category: KnowledgeCategory!
   certificateURL: String
@@ -43,17 +63,26 @@ type Me {
 
 type Mutation {
   addKnowledge(data: CreateKnowledgeInput!): Knowledge!
+  createProject(data: CreateProjectInput!): Project!
+  createProjectTag(data: CreateProjectTagInput!): ProjectTag!
+  deleteProject(id: String!): Project
+  deleteProjectTag(id: String!): ProjectTag
   sendMail(data: SendMailInput!): Boolean!
+  updateProject(data: UpdateProjectInput!, id: String!): Project
+  updateProjectTag(data: UpdateProjectTagInput!, id: String!): ProjectTag
 }
 
 type Project {
+  createdAt: DateTime!
   description: String!
   id: ID!
   imageURLs: [String!]!
   name: String!
   repositoryURL: String
+  slug: String!
   state: Boolean!
   tags: [ProjectTag!]!
+  updatedAt: DateTime!
 }
 
 type ProjectTag {
@@ -65,6 +94,8 @@ type ProjectTag {
 
 type Query {
   personalData: Me!
+  project(slug: String!): Project
+  projects: [Project!]!
 }
 
 input SendMailInput {
@@ -72,4 +103,19 @@ input SendMailInput {
   email: String!
   name: String!
   subject: String!
+}
+
+input UpdateProjectInput {
+  description: String
+  imageURLs: [String!]
+  name: String
+  repositoryURL: String
+  slug: String
+  state: Boolean
+  tagIDs: [String!]
+}
+
+input UpdateProjectTagInput {
+  color: String
+  name: String
 }
