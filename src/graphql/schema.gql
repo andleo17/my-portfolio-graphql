@@ -3,15 +3,156 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-input CreateKnowledgeInput {
-  category: KnowledgeCategory!
-  certificateURL: String
-  description: String!
-  icon: String
-  level: Int!
+"""Logros obtenidos."""
+type Achievement {
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+
+  """Fecha en la que se consiguió el logro."""
+  date: DateTime!
+
+  """Identificador de un registro."""
+  id: ID!
+
+  """Institución donde se consiguió el logro."""
+  institution: Institution!
+
+  """Identificador de la institución donde se realizó el logro."""
+  institutionId: Int!
+
+  """Nombre del logro."""
   name: String!
-  place: String
-  state: Boolean!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+
+  """URL del certificado."""
+  url: String
+}
+
+input CreateAchievementInput {
+  """Fecha en la que se consiguió el logro."""
+  date: DateTime!
+
+  """Identificador de la institución donde se realizó el logro."""
+  institutionId: Int!
+
+  """Nombre del logro."""
+  name: String!
+
+  """URL del certificado."""
+  url: String
+}
+
+input CreateEducationInput {
+  """Ciudad de la institución."""
+  city: String
+
+  """País de la institución."""
+  country: String
+
+  """Fecha final de las actividades."""
+  finishDate: DateTime
+
+  """
+  Nivel de aprendizaje obtenido. Ej: Primaria, Secundaria, Licenciatura, etc.
+  """
+  grade: String!
+
+  """Identificador de la institución donde se realizó el aprendizaje."""
+  institutionId: Int!
+
+  """
+  Fecha de inicio de las actividades. Este dato puede que no sea exacto en cuanto al día.
+  """
+  startDate: DateTime!
+}
+
+input CreateInstitutionInput {
+  """Resumen acerca de la institución."""
+  description: String
+
+  """Nombre de la institución"""
+  name: String!
+
+  """Determina si la institución es considerada en mi vida (?)."""
+  state: Boolean
+
+  """URL de la institución si es que cuenta con uno."""
+  url: String
+}
+
+input CreateKnowledgeCategoryInput {
+  """
+  Breve descripción de lo que trata y cómo es que aplica la categoría de conocimiento.
+  """
+  description: String!
+
+  """Ícono de la categoría."""
+  icon: String!
+
+  """Nombre de la categoría de conocimiento."""
+  name: String!
+
+  """Orden de preferencia de la categoría."""
+  preference: Int!
+
+  """Ruta para mostrar más información acerca de la categoría."""
+  slug: String
+
+  """Determina si esta categoría se mostrará o no en el sitio web."""
+  state: Boolean
+}
+
+input CreateKnowledgeInput {
+  """Identificador de la categoría a la que pertenece el conocimiento."""
+  categoryId: Int!
+
+  """URL del certificado obtenido después de completar los cursos."""
+  certificateURL: String
+
+  """Color del conocimiento que se visualizará en el sitio web."""
+  color: String!
+
+  """Breve descripción acerca de lo que trata y cómo es que lo he aplicado."""
+  description: String!
+
+  """
+  Ícono que representa al conocimiento y que se mostrará en el sitio web.
+  """
+  icon: String
+
+  """Identificador de la institución donde se adquirió el conocimiento."""
+  institutionId: Int
+
+  """Nivel de dominio del conocimiento en una escala del 1 al 10"""
+  level: Int!
+
+  """Nombre o tema del conocimiento."""
+  name: String!
+
+  """Lo que se mostrará en la URL para acceder"""
+  slug: String
+
+  """Determina si el conocimiento es mostrado o no en el sitio web."""
+  state: Boolean
+}
+
+input CreateLanguageInput {
+  finishDate: DateTime
+
+  """Identificador de la institución donde se aprendió el idioma."""
+  institutionId: Int
+
+  """Representa el nivel de dominio del idioma. [A1 -> 1], [C2 -> 6]"""
+  level: Int
+
+  """Nombre del idioma."""
+  name: String!
+
+  """Determina si el idioma es nativo o no."""
+  native: Boolean!
+  startDate: DateTime
 }
 
 input CreateProjectInput {
@@ -21,12 +162,45 @@ input CreateProjectInput {
   repositoryURL: String
   slug: String!
   state: Boolean = true
-  tagIDs: [String!]!
+  tagIDs: [Int!]!
 }
 
-input CreateProjectTagInput {
-  color: String!
+input CreateSkillInput {
+  """Nivel de dominio de la habilidad en una escala del 1 al 10."""
+  level: Int!
+
+  """Nombre de la habilidad."""
   name: String!
+}
+
+input CreateSocialInput {
+  """Nombre del ícono que se mostrará."""
+  icon: String!
+
+  """Nombre de la red social."""
+  name: String!
+
+  """Determina si la red social aún sigue vigente."""
+  state: Boolean
+
+  """URL de mi perfil en la red social."""
+  url: String!
+}
+
+input CreateSoftSkillInput {
+  """Nivel de dominio de la habilidad en una escala del 1 al 10."""
+  level: Int!
+
+  """Nombre de la habilidad."""
+  name: String!
+}
+
+input CreateWorkExperienceInput {
+  description: String!
+  finishDate: DateTime
+  institutionId: Int!
+  position: String!
+  startDate: DateTime!
 }
 
 """
@@ -34,42 +208,286 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
-type Knowledge {
-  category: KnowledgeCategory!
-  certificateURL: String
-  description: String!
-  icon: String
+"""Grados de aprendizaje certificados."""
+type Education {
+  """Ciudad de la institución."""
+  city: String
+
+  """País de la institución."""
+  country: String
+
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+
+  """Fecha final de las actividades."""
+  finishDate: DateTime
+
+  """
+  Nivel de aprendizaje obtenido. Ej: Primaria, Secundaria, Licenciatura, etc.
+  """
+  grade: String!
+
+  """Identificador que representa a un registro."""
   id: ID!
-  level: Int!
-  name: String!
-  place: String
-  state: Boolean!
+
+  """Institución donde se realizó el aprendizaje."""
+  institution: Institution!
+
+  """Identificador de la institución donde se realizó el aprendizaje."""
+  institutionId: Int!
+
+  """
+  Fecha de inicio de las actividades. Este dato puede que no sea exacto en cuanto al día.
+  """
+  startDate: DateTime!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
 }
 
-enum KnowledgeCategory {
-  OTHER
-  TECH
-}
+"""Instituciones por las que he pasado en mi vida."""
+type Institution {
+  """Logros obtenidos en la institución."""
+  achievements: [Achievement!]!
 
-type Me {
-  description: String!
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+
+  """Resumen acerca de la institución."""
+  description: String
+
+  """Identificador de un registro."""
   id: ID!
+
+  """Conocimientos obtenidos en la institución."""
   knowledges: [Knowledge!]!
-  lastname: String!
+
+  """Idiomas aprendidos en la institución."""
+  languages: [Language!]!
+
+  """Nombre de la institución"""
   name: String!
-  phone: String!
+
+  """Determina si la institución es considerada en mi vida (?)."""
+  state: Boolean!
+
+  """Educación obtenida en la institución."""
+  teachings: [Education!]!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+
+  """URL de la institución si es que cuenta con uno."""
+  url: String
+
+  """Experiencia laboral obtenida en la institución."""
+  workExperience: [WorkExperience!]!
+}
+
+"""Conocimientos en ciertas áreas o temas."""
+type Knowledge {
+  """Categoría a la que pertenece el conocimiento."""
+  category: KnowledgeCategory!
+
+  """Identificador de la categoría a la que pertenece el conocimiento."""
+  categoryId: Int!
+
+  """URL del certificado obtenido después de completar los cursos."""
+  certificateURL: String
+
+  """Color del conocimiento que se visualizará en el sitio web."""
+  color: String!
+
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+
+  """Breve descripción acerca de lo que trata y cómo es que lo he aplicado."""
+  description: String!
+
+  """
+  Ícono que representa al conocimiento y que se mostrará en el sitio web.
+  """
+  icon: String
+
+  """Identificador de un registro."""
+  id: ID!
+
+  """Institución donde se adquirió el conocimiento."""
+  institution: Institution
+
+  """Identificador de la institución donde se adquirió el conocimiento."""
+  institutionId: Int
+
+  """Nivel de dominio del conocimiento en una escala del 1 al 10"""
+  level: Int!
+
+  """Nombre o tema del conocimiento."""
+  name: String!
+
+  """Proyectos en los que se ha aplicado el conocimento."""
   projects: [Project!]!
+
+  """Lo que se mostrará en la URL para acceder"""
+  slug: String!
+
+  """Determina si el conocimiento es mostrado o no en el sitio web."""
+  state: Boolean!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+}
+
+"""Categorías de conocimientos."""
+type KnowledgeCategory {
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+
+  """
+  Breve descripción de lo que trata y cómo es que aplica la categoría de conocimiento.
+  """
+  description: String!
+
+  """Ícono de la categoría."""
+  icon: String!
+
+  """Identificador del registro."""
+  id: ID!
+
+  """Nombre de la categoría de conocimiento."""
+  name: String!
+
+  """Orden de preferencia de la categoría."""
+  preference: Int!
+
+  """Ruta para mostrar más información acerca de la categoría."""
+  slug: String!
+
+  """Determina si esta categoría se mostrará o no en el sitio web."""
+  state: Boolean!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+}
+
+"""Idiomas que sé."""
+type Language {
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+  finishDate: DateTime
+
+  """Identificador de un registro."""
+  id: ID!
+
+  """Institución donde se aprendió el idioma."""
+  institution: Institution
+
+  """Identificador de la institución donde se aprendió el idioma."""
+  institutionId: Int
+
+  """Representa el nivel de dominio del idioma. [A1 -> 1], [C2 -> 6]"""
+  level: Int!
+
+  """Nombre del idioma."""
+  name: String!
+
+  """Determina si el idioma es nativo o no."""
+  native: Boolean!
+  startDate: DateTime
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+}
+
+"""Mis datos personales."""
+type Me {
+  """Logros obtenidos."""
+  achievements: [Achievement!]!
+
+  """La ciudad donde resido."""
+  city: String!
+
+  """El país donde resido."""
+  country: String!
+
+  """Una breve descripción de quién soy."""
+  description: String!
+
+  """Grados de educación."""
+  education: [Education!]!
+
+  """Correo electrónico de contacto."""
+  email: String!
+
+  """Un ID representativo, este siempre es 1."""
+  id: ID!
+
+  """Conocimientos"""
+  knowledges: [Knowledge!]!
+
+  """Idiomas que hablo."""
+  languages: [Language!]!
+
+  """Apellidos."""
+  lastname: String!
+
+  """Nombres."""
+  name: String!
+
+  """Teléfono de contacto."""
+  phone: String!
+
+  """Proyectos realizados"""
+  projects: [Project!]!
+
+  """Habilidades"""
+  skills: [Skill!]!
+
+  """Redes sociales."""
+  social: [Social!]!
+
+  """Habilidades blandas"""
+  softSkills: [SoftSkill!]!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+
+  """Experiencia laboral"""
+  workExperience: [WorkExperience!]!
 }
 
 type Mutation {
-  addKnowledge(data: CreateKnowledgeInput!): Knowledge!
+  createAchievement(data: CreateAchievementInput!): Achievement!
+  createEducation(data: CreateEducationInput!): Education!
+  createInstitution(data: CreateInstitutionInput!): Institution!
+  createKnowledge(data: CreateKnowledgeInput!): Knowledge!
+  createLanguage(data: CreateLanguageInput!): Language!
   createProject(data: CreateProjectInput!): Project!
-  createProjectTag(data: CreateProjectTagInput!): ProjectTag!
-  deleteProject(id: String!): Project
-  deleteProjectTag(id: String!): ProjectTag
+  createSkill(data: CreateSkillInput!): Skill!
+  createSocial(data: CreateSocialInput!): Social!
+  createSoftSkill(data: CreateSoftSkillInput!): SoftSkill!
+  createWorkExperience(data: CreateWorkExperienceInput!): WorkExperience!
+  deleteAchievement(id: Int!): Achievement
+  deleteEducation(id: Int!): Education
+  deleteInstitution(id: Int!): Institution
+  deleteKnowledge(id: Int!): Knowledge
+  deleteLanguage(id: Int!): Language
+  deleteProject(id: Int!): Project
+  deleteSkill(id: Int!): Skill
+  deleteSocial(id: Int!): Social
+  deleteSoftSkill(id: Int!): SoftSkill
+  deleteWorkExperience(id: Int!): WorkExperience
   sendMail(data: SendMailInput!): Boolean!
-  updateProject(data: UpdateProjectInput!, id: String!): Project
-  updateProjectTag(data: UpdateProjectTagInput!, id: String!): ProjectTag
+  setPersonalData(data: SetPersonalDataInput!): Me!
+  updateAchievement(data: UpdateAchievementInput!, id: Int!): Achievement
+  updateEducation(data: UpdateEducationInput!, id: Int!): Education
+  updateInstitution(data: UpdateInstitutionInput!, id: Int!): Institution
+  updateKnowledge(data: UpdateKnowledgeInput!, id: Int!): Knowledge
+  updateLanguage(data: UpdateLanguageInput!, id: Int!): Language
+  updateProject(data: UpdateProjectInput!, id: Int!): Project
+  updateSkill(data: UpdateSkillInput!, id: Int!): Skill
+  updateSocial(data: CreateSocialInput!, id: Int!): Social
+  updateSoftSkill(data: UpdateSoftSkillInput!, id: Int!): SoftSkill
+  updateWorkExperience(data: UpdateWorkExperienceInput!, id: Int!): WorkExperience
 }
 
 type Project {
@@ -81,21 +499,32 @@ type Project {
   repositoryURL: String
   slug: String!
   state: Boolean!
-  tags: [ProjectTag!]!
+  tags: [Knowledge!]!
   updatedAt: DateTime!
 }
 
-type ProjectTag {
-  color: String!
-  id: ID!
-  name: String!
-  projects: [Project!]!
-}
-
 type Query {
+  findManyAchievements: [Achievement!]!
+  findManyEducation: [Education!]!
+  findManyInstitution: [Institution!]!
+  findManyKnowledge: [Knowledge!]!
+  findManyLanguage: [Language!]!
+  findManyProjects: [Project!]!
+  findManySkills: [Skill!]!
+  findManySocials: [Social!]!
+  findManySoftSkills: [SoftSkill!]!
+  findManyWorkExperience: [WorkExperience!]!
+  findOneAchievement(id: Int!): Achievement
+  findOneEducation(id: Int!): Education
+  findOneInstitution(id: Int!): Institution
+  findOneKnowledge(id: Int!): Knowledge
+  findOneLanguage(id: Int!): Language
+  findOneProject(slug: String!): Project
+  findOneSkill(id: Int!): Skill
+  findOneSocial(id: Int!): Social
+  findOneSoftSkill(id: Int!): SoftSkill
+  findOneWorkExperience(id: Int!): WorkExperience
   personalData: Me!
-  project(slug: String!): Project
-  projects: [Project!]!
 }
 
 input SendMailInput {
@@ -105,6 +534,214 @@ input SendMailInput {
   subject: String!
 }
 
+input SetPersonalDataInput {
+  """La ciudad donde resido."""
+  city: String!
+
+  """El país donde resido."""
+  country: String!
+
+  """Una breve descripción de quién soy."""
+  description: String!
+
+  """Correo electrónico de contacto."""
+  email: String!
+
+  """Apellidos."""
+  lastname: String!
+
+  """Nombres."""
+  name: String!
+
+  """Teléfono de contacto."""
+  phone: String!
+}
+
+"""Habilidades que tengo."""
+type Skill {
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+
+  """Identificador de un registro."""
+  id: ID!
+
+  """Nivel de dominio de la habilidad en una escala del 1 al 10."""
+  level: Int!
+
+  """Nombre de la habilidad."""
+  name: String!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+}
+
+"""Redes sociales que tengo."""
+type Social {
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+
+  """Nombre del ícono que se mostrará."""
+  icon: String!
+
+  """Identificador que representa a una red social registrada."""
+  id: ID!
+
+  """Nombre de la red social."""
+  name: String!
+
+  """Determina si la red social aún sigue vigente."""
+  state: Boolean!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+
+  """URL de mi perfil en la red social."""
+  url: String!
+}
+
+"""Habilidades blandas que tengo."""
+type SoftSkill {
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+
+  """Identificador de un registro."""
+  id: ID!
+
+  """Nivel de dominio de la habilidad en una escala del 1 al 10."""
+  level: Int!
+
+  """Nombre de la habilidad."""
+  name: String!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
+}
+
+input UpdateAchievementInput {
+  """Fecha en la que se consiguió el logro."""
+  date: DateTime
+
+  """Identificador de la institución donde se realizó el logro."""
+  institutionId: Int
+
+  """Nombre del logro."""
+  name: String
+
+  """URL del certificado."""
+  url: String
+}
+
+input UpdateEducationInput {
+  """Ciudad de la institución."""
+  city: String
+
+  """País de la institución."""
+  country: String
+
+  """Fecha final de las actividades."""
+  finishDate: DateTime
+
+  """
+  Nivel de aprendizaje obtenido. Ej: Primaria, Secundaria, Licenciatura, etc.
+  """
+  grade: String
+
+  """Identificador de la institución donde se realizó el aprendizaje."""
+  institutionId: Int
+
+  """
+  Fecha de inicio de las actividades. Este dato puede que no sea exacto en cuanto al día.
+  """
+  startDate: DateTime
+}
+
+input UpdateInstitutionInput {
+  """Resumen acerca de la institución."""
+  description: String
+
+  """Nombre de la institución"""
+  name: String
+
+  """Determina si la institución es considerada en mi vida (?)."""
+  state: Boolean
+
+  """URL de la institución si es que cuenta con uno."""
+  url: String
+}
+
+input UpdateKnowledgeCategoryInput {
+  """
+  Breve descripción de lo que trata y cómo es que aplica la categoría de conocimiento.
+  """
+  description: String
+
+  """Ícono de la categoría."""
+  icon: String
+
+  """Nombre de la categoría de conocimiento."""
+  name: String
+
+  """Orden de preferencia de la categoría."""
+  preference: Int
+
+  """Ruta para mostrar más información acerca de la categoría."""
+  slug: String
+
+  """Determina si esta categoría se mostrará o no en el sitio web."""
+  state: Boolean
+}
+
+input UpdateKnowledgeInput {
+  """Identificador de la categoría a la que pertenece el conocimiento."""
+  categoryId: Int
+
+  """URL del certificado obtenido después de completar los cursos."""
+  certificateURL: String
+
+  """Color del conocimiento que se visualizará en el sitio web."""
+  color: String
+
+  """Breve descripción acerca de lo que trata y cómo es que lo he aplicado."""
+  description: String
+
+  """
+  Ícono que representa al conocimiento y que se mostrará en el sitio web.
+  """
+  icon: String
+
+  """Identificador de la institución donde se adquirió el conocimiento."""
+  institutionId: Int
+
+  """Nivel de dominio del conocimiento en una escala del 1 al 10"""
+  level: Int
+
+  """Nombre o tema del conocimiento."""
+  name: String
+
+  """Lo que se mostrará en la URL para acceder"""
+  slug: String
+
+  """Determina si el conocimiento es mostrado o no en el sitio web."""
+  state: Boolean
+}
+
+input UpdateLanguageInput {
+  finishDate: DateTime
+
+  """Identificador de la institución donde se aprendió el idioma."""
+  institutionId: Int
+
+  """Representa el nivel de dominio del idioma. [A1 -> 1], [C2 -> 6]"""
+  level: Int
+
+  """Nombre del idioma."""
+  name: String
+
+  """Determina si el idioma es nativo o no."""
+  native: Boolean
+  startDate: DateTime
+}
+
 input UpdateProjectInput {
   description: String
   imageURLs: [String!]
@@ -112,10 +749,59 @@ input UpdateProjectInput {
   repositoryURL: String
   slug: String
   state: Boolean
-  tagIDs: [String!]
+  tagIDs: [Int!]
 }
 
-input UpdateProjectTagInput {
-  color: String
+input UpdateSkillInput {
+  """Nivel de dominio de la habilidad en una escala del 1 al 10."""
+  level: Int
+
+  """Nombre de la habilidad."""
   name: String
+}
+
+input UpdateSocialInput {
+  """Nombre del ícono que se mostrará."""
+  icon: String
+
+  """Nombre de la red social."""
+  name: String
+
+  """Determina si la red social aún sigue vigente."""
+  state: Boolean
+
+  """URL de mi perfil en la red social."""
+  url: String
+}
+
+input UpdateSoftSkillInput {
+  """Nivel de dominio de la habilidad en una escala del 1 al 10."""
+  level: Int
+
+  """Nombre de la habilidad."""
+  name: String
+}
+
+input UpdateWorkExperienceInput {
+  description: String
+  finishDate: DateTime
+  institutionId: Int
+  position: String
+  startDate: DateTime
+}
+
+"""Experiencia laboral."""
+type WorkExperience {
+  """La marca de tiempo cuando se insertó el registro."""
+  createdAt: DateTime!
+  description: String!
+  finishDate: DateTime
+  id: ID!
+  institution: Institution
+  institutionId: Int!
+  position: String!
+  startDate: DateTime!
+
+  """La marca de tiempo cuando se actualizó el registro."""
+  updatedAt: DateTime!
 }

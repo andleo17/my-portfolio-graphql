@@ -1,10 +1,10 @@
-import { Field, ID, InputType, ObjectType } from 'type-graphql';
-import { ProjectTag } from './ProjectTag';
+import { Field, ID, InputType, Int, ObjectType } from 'type-graphql';
+import { Knowledge } from './Knowledge';
 
 @ObjectType()
 export class Project {
 	@Field(() => ID)
-	id: string;
+	id: number;
 
 	@Field()
 	name: string;
@@ -12,14 +12,11 @@ export class Project {
 	@Field()
 	slug: string;
 
-	@Field()
-	description: string;
-
 	@Field(() => [String])
 	imageURLs: string[];
 
-	@Field(() => [ProjectTag])
-	tags?: ProjectTag[];
+	@Field()
+	description: string;
 
 	@Field({ nullable: true })
 	repositoryURL: string;
@@ -32,6 +29,9 @@ export class Project {
 
 	@Field()
 	updatedAt: Date;
+
+	@Field(() => [Knowledge])
+	tags?: Knowledge[];
 }
 
 @InputType()
@@ -48,8 +48,8 @@ export class CreateProjectInput implements Partial<Project> {
 	@Field(() => [String], { nullable: true })
 	imageURLs: string[];
 
-	@Field(() => [String])
-	tagIDs: string[];
+	@Field(() => [Int])
+	tagIDs: number[];
 
 	@Field({ nullable: true })
 	repositoryURL: string;
@@ -72,8 +72,8 @@ export class UpdateProjectInput implements Partial<Project> {
 	@Field(() => [String], { nullable: true })
 	imageURLs: string[];
 
-	@Field(() => [String], { nullable: true })
-	tagIDs: string[];
+	@Field(() => [Int], { nullable: true })
+	tagIDs: number[];
 
 	@Field({ nullable: true })
 	repositoryURL: string;

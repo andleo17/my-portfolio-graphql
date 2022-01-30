@@ -1,57 +1,155 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
 model Me {
-  id          String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id          Int      @id
   name        String
   lastname    String
   phone       String
+  email       String
   description String
+  city        String
+  country     String
+  updatedAt   DateTime @updatedAt
 }
 
-enum KnowledgeCategory {
-  TECH
-  OTHER
+model Social {
+  id        Int      @id @default(autoincrement())
+  name      String
+  icon      String
+  url       String
+  state     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Institution {
+  id             Int              @id @default(autoincrement())
+  name           String
+  description    String?
+  url            String?
+  state          Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  teachings      Education[]
+  achievements   Achievement[]
+  languages      Language[]
+  workExperience WorkExperience[]
+  knowledges     Knowledge[]
+}
+
+model Education {
+  id            Int         @id @default(autoincrement())
+  institutionId Int
+  city          String?
+  country       String?
+  grade         String
+  startDate     DateTime    @db.Date
+  finishDate    DateTime?   @db.Date
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  institution   Institution @relation(fields: [institutionId], references: [id])
+}
+
+model Achievement {
+  id            Int         @id @default(autoincrement())
+  name          String
+  institutionId Int
+  institution   Institution @relation(fields: [institutionId], references: [id])
+  date          DateTime    @db.Date
+  url           String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Language {
+  id            Int          @id @default(autoincrement())
+  name          String
+  institutionId Int?
+  institution   Institution? @relation(fields: [institutionId], references: [id])
+  native        Boolean      @default(false)
+  level         Int
+  startDate     DateTime?    @db.Date
+  finishDate    DateTime?    @db.Date
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Skill {
+  id        Int      @id @default(autoincrement())
+  name      String
+  level     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SoftSkill {
+  id        Int      @id @default(autoincrement())
+  name      String
+  level     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkExperience {
+  id            Int         @id @default(autoincrement())
+  institutionId Int
+  institution   Institution @relation(fields: [institutionId], references: [id])
+  position      String
+  startDate     DateTime    @db.Date
+  finishDate    DateTime?   @db.Date
+  description   String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model KnowledgeCategory {
+  id          Int         @id @default(autoincrement())
+  name        String
+  slug        String
+  description String
+  icon        String
+  preference  Int
+  state       Boolean     @default(true)
+  knowledges  Knowledge[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model Knowledge {
-  id             String            @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id             Int               @id @default(autoincrement())
   name           String
   description    String
-  category       KnowledgeCategory
+  slug           String
+  color          String            @default("gray")
+  categoryId     Int
   icon           String?
-  level          Int
-  place          String?
+  level          Int               @default(1)
+  institutionId  Int?
   certificateURL String?
   state          Boolean           @default(true)
-}
-
-model ProjectTag {
-  id       String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  name     String
-  color    String
-  projects Project[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  category       KnowledgeCategory @relation(fields: [categoryId], references: [id])
+  institution    Institution?      @relation(fields: [institutionId], references: [id])
+  projects       Project[]
 }
 
 model Project {
-  id            String       @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id            Int         @id @default(autoincrement())
   name          String
-  slug          String       @unique
+  slug          String      @unique
   imageURLs     String[]
-  tags          ProjectTag[]
+  tags          Knowledge[]
   description   String
   repositoryURL String?
-  state         Boolean      @default(true)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  state         Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }

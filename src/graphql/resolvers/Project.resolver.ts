@@ -2,6 +2,7 @@ import {
 	Arg,
 	Ctx,
 	FieldResolver,
+	Int,
 	Mutation,
 	Query,
 	Resolver,
@@ -12,33 +13,33 @@ import {
 	Project,
 	UpdateProjectInput,
 } from '../models/Project';
-import { ProjectTag } from '../models/ProjectTag';
 import { APIContext } from '../../utils/createContext';
+import { Knowledge } from '../models/Knowledge';
 
 @Resolver(Project)
 export default class ProjectResolver {
-	@FieldResolver(() => [ProjectTag])
+	@FieldResolver(() => [Knowledge])
 	async tags(
 		@Root() { id }: Project,
 		@Ctx() { prisma }: APIContext
-	): Promise<ProjectTag[]> {
+	): Promise<Knowledge[]> {
 		return prisma.project.findUnique({ where: { id } }).tags();
 	}
 
-	@Query(() => [Project])
-	async projects(@Ctx() { prisma }: APIContext): Promise<Project[]> {
-		return prisma.project.findMany({
-			where: { state: true },
-			orderBy: { createdAt: 'desc' },
-		});
-	}
-
 	@Query(() => Project, { nullable: true })
-	async project(
+	async findOneProject(
 		@Arg('slug') slug: string,
 		@Ctx() { prisma }: APIContext
 	): Promise<Project> {
 		return prisma.project.findUnique({ where: { slug } });
+	}
+
+	@Query(() => [Project])
+	async findManyProjects(@Ctx() { prisma }: APIContext): Promise<Project[]> {
+		return prisma.project.findMany({
+			where: { state: true },
+			orderBy: { createdAt: 'desc' },
+		});
 	}
 
 	@Mutation(() => Project)
@@ -64,7 +65,7 @@ export default class ProjectResolver {
 
 	@Mutation(() => Project, { nullable: true })
 	async updateProject(
-		@Arg('id') id: string,
+		@Arg('id', () => Int) id: number,
 		@Arg('data') data: UpdateProjectInput,
 		@Ctx() { prisma }: APIContext
 	): Promise<Project> {
@@ -86,7 +87,7 @@ export default class ProjectResolver {
 
 	@Mutation(() => Project, { nullable: true })
 	async deleteProject(
-		@Arg('id') id: string,
+		@Arg('id', () => Int) id: number,
 		@Ctx() { prisma }: APIContext
 	): Promise<Project> {
 		return prisma.project.delete({ where: { id } });
