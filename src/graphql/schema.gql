@@ -45,12 +45,6 @@ input CreateAchievementInput {
 }
 
 input CreateEducationInput {
-  """Ciudad de la institución."""
-  city: String
-
-  """País de la institución."""
-  country: String
-
   """Fecha final de las actividades."""
   finishDate: DateTime
 
@@ -69,6 +63,12 @@ input CreateEducationInput {
 }
 
 input CreateInstitutionInput {
+  """Ciudad de la institución."""
+  city: String
+
+  """País de la institución."""
+  country: String
+
   """Resumen acerca de la institución."""
   description: String
 
@@ -210,12 +210,6 @@ scalar DateTime
 
 """Grados de aprendizaje certificados."""
 type Education {
-  """Ciudad de la institución."""
-  city: String
-
-  """País de la institución."""
-  country: String
-
   """La marca de tiempo cuando se insertó el registro."""
   createdAt: DateTime!
 
@@ -249,6 +243,12 @@ type Education {
 type Institution {
   """Logros obtenidos en la institución."""
   achievements: [Achievement!]!
+
+  """Ciudad de la institución."""
+  city: String
+
+  """País de la institución."""
+  country: String
 
   """La marca de tiempo cuando se insertó el registro."""
   createdAt: DateTime!
@@ -632,12 +632,6 @@ input UpdateAchievementInput {
 }
 
 input UpdateEducationInput {
-  """Ciudad de la institución."""
-  city: String
-
-  """País de la institución."""
-  country: String
-
   """Fecha final de las actividades."""
   finishDate: DateTime
 
@@ -656,6 +650,12 @@ input UpdateEducationInput {
 }
 
 input UpdateInstitutionInput {
+  """Ciudad de la institución."""
+  city: String
+
+  """País de la institución."""
+  country: String
+
   """Resumen acerca de la institución."""
   description: String
 

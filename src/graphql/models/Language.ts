@@ -57,7 +57,10 @@ export class CreateLanguageInput implements Partial<Language> {
 	})
 	institutionId: number;
 
-	@Field({ description: 'Determina si el idioma es nativo o no.' })
+	@Field({
+		nullable: true,
+		description: 'Determina si el idioma es nativo o no.',
+	})
 	native: boolean;
 
 	@Field(() => Int, {

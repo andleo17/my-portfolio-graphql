@@ -1,4 +1,5 @@
 import { Field, ID, InputType, Int, ObjectType } from 'type-graphql';
+import { Knowledge } from './Knowledge';
 
 @ObjectType({ description: 'Categorías de conocimientos.' })
 export class KnowledgeCategory {
@@ -36,6 +37,11 @@ export class KnowledgeCategory {
 
 	@Field({ description: 'La marca de tiempo cuando se actualizó el registro.' })
 	updatedAt: Date;
+
+	@Field(() => [Knowledge], {
+		description: 'Conocimientos que pertenecen a la categoría.',
+	})
+	knowledges?: Knowledge[];
 }
 
 @InputType()

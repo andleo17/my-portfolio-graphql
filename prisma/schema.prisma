@@ -117,9 +117,9 @@ model KnowledgeCategory {
   icon        String
   preference  Int
   state       Boolean     @default(true)
-  knowledges  Knowledge[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  knowledges  Knowledge[]
 }
 
 model Knowledge {
