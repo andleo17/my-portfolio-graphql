@@ -24,6 +24,12 @@ export class Institution {
 	@IsUrl()
 	url: string;
 
+	@Field({ nullable: true, description: 'Ciudad de la institución.' })
+	city: string;
+
+	@Field({ nullable: true, description: 'País de la institución.' })
+	country: string;
+
 	@Field({
 		description: 'Determina si la institución es considerada en mi vida (?).',
 	})
@@ -75,6 +81,12 @@ export class CreateInstitutionInput implements Partial<Institution> {
 	})
 	url: string;
 
+	@Field({ nullable: true, description: 'Ciudad de la institución.' })
+	city: string;
+
+	@Field({ nullable: true, description: 'País de la institución.' })
+	country: string;
+
 	@Field({
 		nullable: true,
 		description: 'Determina si la institución es considerada en mi vida (?).',
@@ -95,6 +107,12 @@ export class UpdateInstitutionInput implements Partial<Institution> {
 		description: 'URL de la institución si es que cuenta con uno.',
 	})
 	url: string;
+
+	@Field({ nullable: true, description: 'Ciudad de la institución.' })
+	city: string;
+
+	@Field({ nullable: true, description: 'País de la institución.' })
+	country: string;
 
 	@Field({
 		nullable: true,

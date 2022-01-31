@@ -14,12 +14,6 @@ export class Education {
 	})
 	institutionId: number;
 
-	@Field({ nullable: true, description: 'Ciudad de la institución.' })
-	city: string;
-
-	@Field({ nullable: true, description: 'País de la institución.' })
-	country: string;
-
 	@Field({
 		description:
 			'Nivel de aprendizaje obtenido. Ej: Primaria, Secundaria, Licenciatura, etc.',
@@ -55,12 +49,6 @@ export class CreateEducationInput implements Partial<Education> {
 	})
 	institutionId: number;
 
-	@Field({ nullable: true, description: 'Ciudad de la institución.' })
-	city: string;
-
-	@Field({ nullable: true, description: 'País de la institución.' })
-	country: string;
-
 	@Field({
 		description:
 			'Nivel de aprendizaje obtenido. Ej: Primaria, Secundaria, Licenciatura, etc.',
@@ -85,12 +73,6 @@ export class UpdateEducationInput implements Partial<Education> {
 			'Identificador de la institución donde se realizó el aprendizaje.',
 	})
 	institutionId: number;
-
-	@Field({ nullable: true, description: 'Ciudad de la institución.' })
-	city: string;
-
-	@Field({ nullable: true, description: 'País de la institución.' })
-	country: string;
 
 	@Field({
 		nullable: true,

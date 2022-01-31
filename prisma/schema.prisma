@@ -34,6 +34,8 @@ model Institution {
   name           String
   description    String?
   url            String?
+  city           String?
+  country        String?
   state          Boolean          @default(true)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
@@ -47,8 +49,6 @@ model Institution {
 model Education {
   id            Int         @id @default(autoincrement())
   institutionId Int
-  city          String?
-  country       String?
   grade         String
   startDate     DateTime    @db.Date
   finishDate    DateTime?   @db.Date
