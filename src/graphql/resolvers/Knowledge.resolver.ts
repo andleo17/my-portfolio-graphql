@@ -91,6 +91,12 @@ export default class KnowledgeResolver {
 		@Arg('data') data: UpdateKnowledgeInput,
 		@Ctx() { prisma }: APIContext
 	): Promise<Knowledge> {
+		const oldData = await prisma.knowledge.findUnique({
+			where: { id },
+			include: { categories: true },
+		});
+		if (!oldData) return null;
+
 		const newData: Prisma.KnowledgeUpdateInput = {
 			description: data.description,
 			name: data.name,
@@ -105,6 +111,9 @@ export default class KnowledgeResolver {
 		if (data.categoryIds)
 			newData.categories = {
 				connect: data.categoryIds.map((c) => ({ id: c })),
+				disconnect: oldData.categories
+					.filter((c) => !data.categoryIds.includes(c.id))
+					.map((c) => ({ id: c.id })),
 			};
 		if (data.institutionId)
 			newData.institution = { connect: { id: data.institutionId } };
