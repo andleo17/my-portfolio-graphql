@@ -49,7 +49,9 @@ export default class KnowledgeCategoryResolver {
 		@Arg('data') data: CreateKnowledgeCategoryInput,
 		@Ctx() { prisma }: APIContext
 	): Promise<KnowledgeCategory> {
-		if (!data.slug) data.slug = data.name.toLowerCase().replaceAll(' ', '-');
+		const formatedName = data.name.toLowerCase().replaceAll(' ', '-');
+		if (!data.icon) data.icon = formatedName;
+		if (!data.slug) data.slug = formatedName;
 		return prisma.knowledgeCategory.create({ data });
 	}
 

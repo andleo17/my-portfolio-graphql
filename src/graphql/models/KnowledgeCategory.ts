@@ -63,7 +63,7 @@ export class CreateKnowledgeCategoryInput
 	})
 	description: string;
 
-	@Field({ description: 'Ícono de la categoría.' })
+	@Field({ nullable: true, description: 'Ícono de la categoría.' })
 	icon: string;
 
 	@Field(() => Int, { description: 'Orden de preferencia de la categoría.' })
