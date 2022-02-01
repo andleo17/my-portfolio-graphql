@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import {
 	Arg,
 	Ctx,
@@ -20,12 +21,12 @@ import { Project } from '../models/Project';
 
 @Resolver(Knowledge)
 export default class KnowledgeResolver {
-	@FieldResolver(() => KnowledgeCategory)
-	async category(
+	@FieldResolver(() => [KnowledgeCategory])
+	async categories(
 		@Root() { id }: Knowledge,
 		@Ctx() { prisma }: APIContext
-	): Promise<KnowledgeCategory> {
-		return prisma.knowledge.findUnique({ where: { id } }).category();
+	): Promise<KnowledgeCategory[]> {
+		return prisma.knowledge.findUnique({ where: { id } }).categories();
 	}
 
 	@FieldResolver(() => Institution, { nullable: true })
@@ -65,8 +66,23 @@ export default class KnowledgeResolver {
 		@Arg('data') data: CreateKnowledgeInput,
 		@Ctx() { prisma }: APIContext
 	): Promise<Knowledge> {
-		if (!data.slug) data.slug = data.name.toLowerCase().replaceAll(' ', '-');
-		return prisma.knowledge.create({ data });
+		const formatedName = data.name.toLowerCase().replaceAll(' ', '-');
+		if (!data.slug) data.slug = formatedName;
+		if (!data.icon) data.icon = formatedName;
+		return prisma.knowledge.create({
+			data: {
+				description: data.description,
+				name: data.name,
+				slug: data.slug,
+				color: data.color,
+				certificateURL: data.certificateURL,
+				icon: data.icon,
+				level: data.level,
+				state: data.state,
+				categories: { connect: data.categoryIds.map((c) => ({ id: c })) },
+				institution: { connect: { id: data.institutionId } },
+			},
+		});
 	}
 
 	@Mutation(() => Knowledge, { nullable: true })
@@ -75,7 +91,28 @@ export default class KnowledgeResolver {
 		@Arg('data') data: UpdateKnowledgeInput,
 		@Ctx() { prisma }: APIContext
 	): Promise<Knowledge> {
-		return prisma.knowledge.update({ where: { id }, data });
+		const newData: Prisma.KnowledgeUpdateInput = {
+			description: data.description,
+			name: data.name,
+			slug: data.slug,
+			color: data.color,
+			certificateURL: data.certificateURL,
+			icon: data.icon,
+			level: data.level,
+			state: data.state,
+		};
+
+		if (data.categoryIds)
+			newData.categories = {
+				connect: data.categoryIds.map((c) => ({ id: c })),
+			};
+		if (data.institutionId)
+			newData.institution = { connect: { id: data.institutionId } };
+
+		return prisma.knowledge.update({
+			where: { id },
+			data: newData,
+		});
 	}
 
 	@Mutation(() => Knowledge, { nullable: true })

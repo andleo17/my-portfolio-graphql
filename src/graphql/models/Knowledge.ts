@@ -25,12 +25,6 @@ export class Knowledge {
 	})
 	color: string;
 
-	@Field(() => Int, {
-		description:
-			'Identificador de la categoría a la que pertenece el conocimiento.',
-	})
-	categoryId: number;
-
 	@Field({
 		nullable: true,
 		description:
@@ -71,10 +65,10 @@ export class Knowledge {
 	@Field({ description: 'La marca de tiempo cuando se actualizó el registro.' })
 	updatedAt: Date;
 
-	@Field(() => KnowledgeCategory, {
-		description: 'Categoría a la que pertenece el conocimiento.',
+	@Field(() => [KnowledgeCategory], {
+		description: 'Categorías a la que pertenece el conocimiento.',
 	})
-	category?: KnowledgeCategory;
+	categories?: KnowledgeCategory[];
 
 	@Field(() => Institution, {
 		nullable: true,
@@ -110,11 +104,11 @@ export class CreateKnowledgeInput implements Partial<Knowledge> {
 	})
 	color: string;
 
-	@Field(() => Int, {
+	@Field(() => [Int], {
 		description:
-			'Identificador de la categoría a la que pertenece el conocimiento.',
+			'Identificadores de las categorías a la que pertenece el conocimiento.',
 	})
-	categoryId: number;
+	categoryIds: number[];
 
 	@Field({
 		nullable: true,
@@ -176,12 +170,12 @@ export class UpdateKnowledgeInput implements Partial<Knowledge> {
 	})
 	color: string;
 
-	@Field(() => Int, {
+	@Field(() => [Int], {
 		nullable: true,
 		description:
-			'Identificador de la categoría a la que pertenece el conocimiento.',
+			'Identificadores de las categorías a la que pertenece el conocimiento.',
 	})
-	categoryId: number;
+	categoryIds: number[];
 
 	@Field({
 		nullable: true,
