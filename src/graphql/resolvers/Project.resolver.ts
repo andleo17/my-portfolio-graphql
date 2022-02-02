@@ -15,6 +15,7 @@ import {
 } from '../models/Project';
 import { APIContext } from '../../utils/createContext';
 import { Knowledge } from '../models/Knowledge';
+import { Prisma } from '@prisma/client';
 
 @Resolver(Project)
 export default class ProjectResolver {
@@ -69,19 +70,32 @@ export default class ProjectResolver {
 		@Arg('data') data: UpdateProjectInput,
 		@Ctx() { prisma }: APIContext
 	): Promise<Project> {
+		const oldData = await prisma.project.findUnique({
+			where: { id },
+			include: { tags: true },
+		});
+		if (!oldData) return null;
+
+		const newData: Prisma.ProjectUpdateInput = {
+			name: data.name,
+			description: data.description,
+			slug: data.slug,
+			repositoryURL: data.repositoryURL,
+			state: data.state,
+			imageURLs: data.imageURLs,
+		};
+
+		if (data.tagIDs)
+			newData.tags = {
+				connect: data.tagIDs.map((t) => ({ id: t })),
+				disconnect: oldData.tags
+					.filter((c) => !data.tagIDs.includes(c.id))
+					.map((c) => ({ id: c.id })),
+			};
+
 		return prisma.project.update({
 			where: { id },
-			data: {
-				name: data.name,
-				description: data.description,
-				slug: data.slug,
-				repositoryURL: data.repositoryURL,
-				state: data.state,
-				imageURLs: data.imageURLs,
-				tags: {
-					connect: data.tagIDs.map((t) => ({ id: t })),
-				},
-			},
+			data: newData,
 		});
 	}
 
