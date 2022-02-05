@@ -80,7 +80,9 @@ export default class KnowledgeResolver {
 				level: data.level,
 				state: data.state,
 				categories: { connect: data.categoryIds.map((c) => ({ id: c })) },
-				institution: { connect: { id: data.institutionId } },
+				institution: data.institutionId && {
+					connect: { id: data.institutionId },
+				},
 			},
 		});
 	}
