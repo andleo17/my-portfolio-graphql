@@ -47,10 +47,10 @@ export default class KnowledgeResolver {
 
 	@Query(() => Knowledge, { nullable: true })
 	async findOneKnowledge(
-		@Arg('id', () => Int) id: number,
+		@Arg('slug') slug: string,
 		@Ctx() { prisma }: APIContext
 	): Promise<Knowledge> {
-		return prisma.knowledge.findUnique({ where: { id } });
+		return prisma.knowledge.findUnique({ where: { slug } });
 	}
 
 	@Query(() => [Knowledge])
